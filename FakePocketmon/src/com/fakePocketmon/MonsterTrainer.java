@@ -17,7 +17,6 @@ public class MonsterTrainer
         trainerName  = "지우";
         monsterBalls = new ArrayList<Monster>();
     }
-    
 
     /**
      *  체력을 리셋한다.
@@ -31,9 +30,7 @@ public class MonsterTrainer
         }
     }
     
-    
-    /**
-     * @param sparePartner
+    /** 몬스터를 포획한다. 
      * @return boolean 몬스터 포획의 결과값 반환 true : 
      */
     public boolean catchMonster(Monster sparePartner)
@@ -55,26 +52,32 @@ public class MonsterTrainer
         return true;
     }
 
+    /** 몬스터볼 리스트에 몬스터를 추가한다. */
     public boolean addMonster(Monster sparePartner)
     {
         monsterBalls.add(sparePartner);
         return true;
     }
+    
+    /** 트레이너의 이름을 가져온다. */
     public String getTtrainerName()
     {
         return trainerName;
     }
     
+    /** 트레이너가 보유하고 있는 몬스터 목록을 반환한다 */
     public List<Monster> getMonsterBalls()
     {
         return monsterBalls;
     }
 
+    /** 현재 몬스터볼의 개수를 반환한다. */
     public int getMonsterBallCount()
     {
         return monsterBalls.size();
     }
 
+    /** 트레이너의 정보를 출력한다. */
     public String printInfo()
     {
         String rtnInfo = "";

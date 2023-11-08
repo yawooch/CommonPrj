@@ -8,59 +8,12 @@ public class PlayGroundController
 
     public static void main(String[] args)
     {
-        /* 몬스터 테스트  */
-//        {
-//            FlameMonster fm = new FlameMonster();
-//            
-//            Monster enemy = null;
-//            
-//            enemy = new FlameMonster();
-//            enemy.setMonsterName("리자드");
-//            
-//            System.out.println(fm.printInfo());
-//            
-//            fm.attack(enemy, 20);
-//            
-//            
-//            System.out.println(fm.printInfo());
-//            
-//            enemy.attack(fm, enemy.getAttackPoint());
-//            
-//            System.out.println(enemy.printInfo());
-//        }
-        
-        
-        /* 트레이너 테스트  */
-//        {
-//            MonsterTrainer me = new MonsterTrainer();
-//            
-//            System.out.println(me.printInfo());
-//        }
-        
-        //1. 행동선택
-        //1-1. 여행한다
-        //1-2. 현재상태를 본다
-        //1-3. 잡은 몬스터 상태를 본다.
-        //1-9. 여행을 종료한다
-        
-        //1-1. 여행한다(야생의 ㅇㅇ을 만났다)
-        //1-1-1. 싸운다
-        //1-1-2. 도망간다
-        
-        //1-2. 현재상태를 본다
-        
-        //1-3. 잡은 몬스터 상태를 본다.(누구를 볼까?)
-
-//        Monster enemy = enemy = new FlameMonster();
-//        enemy.setMonsterName("리자드");
-        
         MonsterTrainer me = new MonsterTrainer();
         
-//        System.out.println(me.printInfo());
-        Scanner sc     = null;
-        String nextVal = null;
-        
+        Scanner sc       = null;
+        String nextVal   = null;
         boolean exitGame = true;
+        
         while(exitGame)
         {
             sc = new Scanner(System.in);
@@ -69,6 +22,7 @@ public class PlayGroundController
             System.out.println("2. 현재상태를 본다");
             System.out.println("3. 잡은 몬스터 상태를 본다.");
             System.out.println("9. 여행을 종료한다");
+            
             nextVal = sc.next();
             sc.nextLine();
             int parseDecision = Integer.parseInt(String.valueOf(nextVal.charAt(0))); 
@@ -92,8 +46,7 @@ public class PlayGroundController
                     {
                     //1. yes
                     case 1 :
-                        //몬스터 선택 메뉴
-                        System.out.println("몬스터 선택 메뉴 나와라~");
+                        //몬스터 선택 메
                         selectMonster(me);
                         break;
                     //2. no
@@ -122,11 +75,11 @@ public class PlayGroundController
                     break;
                 }
                 break;
-            //1-2. 현재상태를 본다
+            //2. 현재상태를 본다
             case 2 : 
                 System.out.println(me.printInfo());
                 break;
-            //1-3. 잡은 몬스터 상태를 본다.(누구를 볼까?)
+            //3. 잡은 몬스터 상태를 본다.(누구를 볼까?)
             case 3 : 
 
                 //if 트레이너가 몬스터가 없다면 보여줄수 없다.
@@ -158,7 +111,7 @@ public class PlayGroundController
                 
                 System.out.println(trainersMons.get(parseDecision-1).printInfo());
                 break;
-            //1-9. 여행을 종료한다
+            //9. 여행을 종료한다
             case 9 :
                 System.out.println("게임을 종료합니다.");
                 exitGame = false;
@@ -208,7 +161,7 @@ public class PlayGroundController
             System.out.println(i +". " + monsArr[i-1]);
         }
 
-        String monSel = String.valueOf(sc.nextLine().charAt(0));//버퍼 비우기 귀찮아서 nextLine() 사용
+        String monSel = String.valueOf(sc.nextLine().charAt(0));
         int monSelInt = Integer.parseInt(monSel);
         switch(monSelInt)
         {
@@ -227,6 +180,6 @@ public class PlayGroundController
         }
         selMonName = monsArr[monSelInt-1];
         System.out.println(selMonName + "! 넌 내꺼야~!");
-        System.out.println("출발하자~");
+        System.out.println("출발하자~\n");
     }
 }

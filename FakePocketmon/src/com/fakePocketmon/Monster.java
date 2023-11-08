@@ -8,7 +8,6 @@ public class Monster
     private int     attackPoint     = 0;       //공격력
     private String  elementAttr     = "";      //속성
     private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
-    
 
     public Monster()
     {
@@ -19,21 +18,18 @@ public class Monster
         this.battleStatus = true;
     }
     
-    public Monster(int healthPoint, int attackPoint, String elementAttr, boolean battleStatus, String monsterName)
-    {
-        this.healthPoint  = healthPoint;
-        this.attackPoint  = attackPoint;
-        this.elementAttr  = elementAttr;
-        this.battleStatus = battleStatus;
-        this.monsterName  = monsterName;
-    }
-    
+    /** 상태 Monster 를 전달받아 공격 데미지를 전달한다.
+     * @param enemy
+     * @param damage
+     * @return
+     */
     public boolean attack(Monster enemy, int damage)
     {
         System.out.println(enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
         return enemy.attackedByEnemy(damage);
     }
 
+    /** 공격받은 데미지를 전달받아 healthPoint 를 감소시킨다 */
     private boolean attackedByEnemy(int damage)
     {
         healthPoint = healthPoint - damage;
@@ -46,6 +42,8 @@ public class Monster
         
         return battleStatus;
     }
+    
+    /** 몬스터의 현재 상태를 출력한다 */
     public String printInfo()
     {
         String rtnInfo = "";
@@ -63,56 +61,107 @@ public class Monster
     {
          
     }
-    
 
+    
+    /*********************************** getter / setter **********************************************/
+    
+    /**
+     * @return the monsterName
+     */
+    public String getMonsterName()
+    {
+        return monsterName;
+    }
+
+    /**
+     * @param monsterName the monsterName to set
+     */
+    public void setMonsterName(String monsterName)
+    {
+        this.monsterName = monsterName;
+    }
+
+    /**
+     * @return the healthPoint
+     */
     public int getHealthPoint()
     {
         return healthPoint;
     }
+
+    /**
+     * @param healthPoint the healthPoint to set
+     */
     public void setHealthPoint(int healthPoint)
     {
         this.healthPoint = healthPoint;
     }
+
+    /**
+     * @return the healthPointMax
+     */
     public int getHealthPointMax()
     {
         return healthPointMax;
     }
+
+    /**
+     * @param healthPointMax the healthPointMax to set
+     */
     public void setHealthPointMax(int healthPointMax)
     {
         this.healthPointMax = healthPointMax;
     }
+
+    /**
+     * @return the attackPoint
+     */
     public int getAttackPoint()
     {
         return attackPoint;
     }
+
+    /**
+     * @param attackPoint the attackPoint to set
+     */
     public void setAttackPoint(int attackPoint)
     {
         int diff =  attackPoint - this.attackPoint;
         System.out.println("공격력이 "+ diff + "으로 되었다.");
         this.attackPoint = attackPoint;
     }
+
+    /**
+     * @return the elementAttr
+     */
     public String getElementAttr()
     {
         return elementAttr;
     }
+
+    /**
+     * @param elementAttr the elementAttr to set
+     */
     public void setElementAttr(String elementAttr)
     {
         this.elementAttr = elementAttr;
     }
+
+    /**
+     * @return the battleStatus
+     */
     public boolean isBattleStatus()
     {
         return battleStatus;
     }
+
+    /**
+     * @param battleStatus the battleStatus to set
+     */
     public void setBattleStatus(boolean battleStatus)
     {
         this.battleStatus = battleStatus;
     }
-    public String getMonsterName()
-    {
-        return monsterName;
-    }
-    public void setMonsterName(String monsterName)
-    {
-        this.monsterName = monsterName;
-    }
+    
+
 }
