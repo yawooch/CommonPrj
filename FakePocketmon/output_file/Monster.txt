@@ -1,0 +1,40 @@
+
+public class Monster
+{
+    private String  monsterName     = "";      //몬스터이름
+    private int     healthPoint     = 0;       //생명포인트
+    private int     healthPointMax  = 100;     //생명포인트 풀피
+    private int     attackPoint     = 0;       //공격력
+    private String  elementAttr     = "";      //속성
+    private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
+
+    //healthPointMax
+    public Monster()
+    {
+        //this.healthPoint  = healthPointMax;
+        //this.attackPoint  = (int)기본설정;
+        //this.elementAttr  = 임시 속성 고정값
+        //this.monsterName  = 임시 속성 고정값
+        //this.battleStatus = true;
+    }
+
+    public boolean attack(Monster enemy, int damage)
+    {
+        System.out.println(enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        return enemy.attackedByEnemy(damage);
+    }
+    
+    //적에게 데미지를 전달받으면 healthPoint를 감소시키는 메소드, 내부에서만 사용하자
+    private boolean attackedByEnemy(int damage){}
+    
+    //몬스터의 정보를 출력해주는 메소드
+    public String printInfo()
+    {
+        //몬스터이름 :
+        //HP :
+        //공격력 :
+        //속성 :
+        //전투가능상태 :
+    }
+    //그외 getter/setter 는 생략한다.
+}

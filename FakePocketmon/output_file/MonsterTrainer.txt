@@ -1,0 +1,42 @@
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MonsterTrainer
+{ 
+    private String trainerName         = "";     //트레이너 네임 
+    private int experiencePoint        = 0;      //현재경험치 
+    private int experiencePointMax     = 100;    //경험치상한
+    private int monsterBallsMax        = 3;      //잡을수 있는 몬스터수
+    private int trainerLevel           = 1;      //트레이너레벨
+    private List<Monster> monsterBalls = null;   //잡을수 있는 몬스터수 
+    
+    // 트레이너 이름과 monsterBalls 를 초기화 해준다.
+    public MonsterTrainer(){}
+
+    /** 전투시작전에 이전에 싸움이 있었다면 떨어진 체력을 리셋하는 메소드 */
+    public void healthReset(){}
+    /**
+     * 트레이너가 몬스터를 잡아서 monsterBalls 에 add 하는 메소드
+     * 잡을 대상의 체력이 20 % 이상이면 잡을수 없다
+     * @param Monster
+     * @return boolean 몬스터 포획의 결과값 반환 true : 
+     */
+    public boolean catchMonster(Monster sparePartner){}
+
+    /** 단순히 monsterBalls 에 몬스터를 넣기위한 메소드 */
+    public boolean addMonster(Monster sparePartner){}
+    public String getTtrainerName(){}
+    public List<Monster> getMonsterBalls(){}
+    public int getMonsterBallCount(){}
+    //필드정보를 출력해주는 메소드
+    public String printInfo()
+    {
+        //트레이너이름 : 
+        //트레이너레벨 : 
+        //경험치 :      
+        //잡은몬스터 수 :
+    }
+}
+

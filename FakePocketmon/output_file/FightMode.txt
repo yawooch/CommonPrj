@@ -1,0 +1,117 @@
+
+
+import java.util.List;
+import java.util.Scanner;
+
+public class FightMode
+{
+    private boolean turningCoin = true; //턴제 코인 true : 내차례, false : 니차례
+    
+    /**
+     * 싸움실행 메인 트레이너 VS 몬스터
+     * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
+     * 턴제 방식 요약
+     * 반복문 초반의 전투상태 확인 메소드로 인해 둘중 하나가 전투불가되면 반복문이 종료되게한다.
+     * boolean(이 적합)으로 내 차례와 상태차례를 반전시키면 반복문을 실행
+     */
+    @SuppressWarnings("resource")
+    public void startFight(MonsterTrainer me, Monster enemy)
+    {
+        //(만약) 이전 싸움에서 전투불능된 포켓몬을 다시 체력 리셋한다.
+        
+        while(true)
+        {   
+            //둘중에 하나라도 전투불가 상태가 있으면 전투를 종료한다.
+            //if() whoIsWinner(me, enemy) 사용
+            {
+                //System.out.println("\n" + whoIsWinner(me, enemy) + "가 승리하였다!!");
+                //System.out.println("전투를 종료합니다");
+                //반복문 종료
+            }
+
+            //트레이너 몬스터에서 사용가능한 포켓몬을 대표 몬스터로 지정
+            for(Monster myMonster : myMonsters)
+            {
+            }
+            
+            //내차례냐 니차례냐 true : 내 차례 , false : 니 차례
+            if(turningCoin)
+            {
+                //내 차례
+                //System.out.println("\n<나의 차례>");
+                //System.out.println(.getMonsterName() + "의 체력 : " + .getHealthPoint() +"/" + .getHealthPointMax());
+                //System.out.println("1. 공격");
+                //System.out.println("2. 몬스터 볼을 던진다.");
+                //System.out.println("3. 도망간다.");
+                
+                switch()
+                {
+                //1. 공격
+                case 1 :
+                    //System.out.println("힘내라 !!" + currMonster.getMonsterName());
+                    //.attack() // 공격한다
+                    //turningCoin = !turningCoin;//턴을 돌려준다.
+                    break;
+                //2. 몬스터 볼을 던진다.
+                case 2 :
+                    //.catchMonster(enemy);//true : 잡음 , false : 못잡음
+                    break;
+                //3. 도망간다.
+                case 3 :
+                    // 방법 1 - 트레이너의 모든 몬스터를 전투불가상태로 바꾼다.
+                    // 방법 2 - 트레이너에게 전투가능 상태를 추가해도된다.
+                    //System.out.println(.getTtrainerName() + "는(은) 전의를 잃고 도망쳤다.");
+                    break;
+                }
+            }
+            // 니차례
+            else
+            {
+                //System.out.println("\n<상대의 차례>");
+                //방법 1 - 상대차례를 계산하는 랜덤함수 사용 (공격 or 도망)
+                //방법 2 - 공격만하는 경우로 행동을 제한
+                
+                
+                //0 ~ 9까지의 랜덤 함수 실행
+                //0은 도망을 선택한다(10%확률로 도망)
+                //int actionInt = (int)(Math.random() * 10);
+                //System.out.println(.getMonsterName() + "의 체력 : " + .getHealthPoint() +"/" + .getHealthPointMax());
+                if()
+                {
+                    //System.out.println(.getMonsterName() + "는(은) 전의를 잃고 도망쳤다.");
+                    //enemy.setBattleStatus(false);상대 몬스터를 전투불가 상대로변경
+                    //turningCoin = !turningCoin;//턴을 돌려준다.
+                }
+                else
+                {
+                    //attack 메소드는 상태의 전투상태를 반환한다.
+                    //.attack() 상대가 공격하는 메소드 실행
+                    //turningCoin = !turningCoin;//턴을 돌려준다.
+                }
+            }
+        }
+    }
+
+    /** 
+     * 몬스터의 전투가능상태를 반환한다.
+     * false : 전투불가, true : 전투가능
+     * @param monster
+     * @return boolean
+     */
+    public static boolean isFightable(Monster monster){}
+    /** 트레이너의 전투가능상태를 반환한다.
+     * false : 전투불가, true : 전투가능
+     * @param trainer
+     * @return boolean
+     */
+    public static boolean isFightable(MonsterTrainer trainer){}
+    
+    /**
+     * 두선수의 상태를 파악해서 승자를 판단한다.
+     * @param endFight
+     * @param trainer
+     * @param monster
+     * @return 승자
+     */
+    public static String whoIsWinner(MonsterTrainer trainer, Monster monster){}
+}

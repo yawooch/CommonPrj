@@ -1,0 +1,36 @@
+
+public class FlameMonster extends Monster
+{
+    public FlameMonster()
+    {
+        super.setMonsterName("파이리");
+        super.setElementAttr("화염");
+    }
+}
+
+public class GrassMonster extends Monster
+{
+    public GrassMonster()
+    {
+        super.setMonsterName("이상해씨");
+        super.setElementAttr("초식");
+    }
+}
+
+public class LightningMonster extends Monster
+{
+    public LightningMonster()
+    {
+        super.setMonsterName("피카츄");
+        super.setElementAttr("번개");
+    }
+}
+
+public class WaterMonster extends Monster
+{
+    public WaterMonster()
+    {
+        super.setMonsterName("꼬부기");
+        super.setElementAttr("물");
+    }
+}
