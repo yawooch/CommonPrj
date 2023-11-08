@@ -6,52 +6,6 @@ import java.util.Scanner;
 public class FightMode
 {
     private boolean turningCoin = true; //턴제 코인 true : 내차례, false : 니차례
-    //테스트용 메인 메소드
-    public static void main(String[] args)
-    {
-        
-        MonsterTrainer me = new MonsterTrainer();
-
-        Monster pikachu = new LightningMonster();
-        Monster ggobugi = new WaterMonster();
-        pikachu.setAttackPoint(45);
-        ggobugi.setAttackPoint(45);
-        me.addMonster(pikachu);
-        me.addMonster(ggobugi);
-
-        Monster enemy = new WaterMonster();
-        
-        FightMode fm = new FightMode();
-        fm.startFight(me, enemy);
-        
-        
-        //1. 포켓몬 출전(가라 OOO!!)
-        //2. 포켓몬 행동선택
-        //2-1. 공격
-        //2-2. 몬스터 볼을 던진다.
-        //2-3. 도망간다.
-        
-        //싸울수있는지 확인이 가능한메소드
-        //Case 1 - 나 : 전투가능 , 적 : 전투가능
-        
-        //Case 1
-        //Case 1-1 - 내 차례냐? 니 차례냐?
-        //Case 1-1-1 - 내 차례
-        //1. 포켓몬 행동선택 : 모든행동이 끝나면 턴을 상대에게 돌린다.
-        //1-1. 공격
-        //1-2. 몬스터 볼을 던진다.
-        //1-3. 도망간다.
-        //Case 1-1-2 - 니 차례
-        //상대 액션 메소드
-        // 랜덤 함수로 상대의 행동을 처리한다.
-        // 공격
-        // 도망
-        
-        //Case 2 - 나 : 전투불가 , 적 : 전투가능
-        //Case 3 - 나 : 전투가능 , 적 : 전투불가
-        //Case 2, Case 3 - 전투종료
-        
-    }
     /**
      * 싸움실행 메인 트레이너 VS 몬스터
      * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
