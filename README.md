@@ -7,3 +7,4 @@
 4. outputFile 폴더에 있는 내용 참조해서 각자 구현하면됨
 
 ![클래스다이어그램](https://github.com/yawooch/CommonPrj/blob/main/FakePocketmon/output_file/%ED%81%B4%EB%9E%98%EC%8A%A4.%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8.png)
+![메소드정의서](https://github.com/yawooch/CommonPrj/blob/main/FakePocketmon/output_file/%EB%A9%94%EC%86%8C%EB%93%9C%EC%A0%95%EC%9D%98%EC%84%9C.pdf)
