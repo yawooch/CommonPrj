@@ -49,6 +49,7 @@ public class FightMode
                 }
             }
             
+            System.out.println("/********************************************************");
             //내차례냐 니차례냐 true : 내 차례 , false : 니 차례
             if(turningCoin)
             {

@@ -68,10 +68,9 @@ public class Monster
     {
         ArrayList<String> element = new ArrayList<>(Arrays.asList("전기", "물", "불", "풀"));
         int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};
-        int damage = 0;
-        
-        int damageGap      = 40;
-        int elemntEfftPer = 10;
+        int damage                = 0;
+        int damageGap             = 30;
+        int elemntEfftPer         = 20;
         
         // 일반공격 범위
         int attackPointMax = attackPoint;
@@ -81,7 +80,7 @@ public class Monster
         }
         int attackRange    = (int)(Math.random()*damageGap) +1;
         
-        damage = attackPointMax - attackRange;// 공격력에서 기본 0~20 뺀 공격력으로 데미지를 조절한다.
+        damage = attackPointMax - attackRange;// 공격력에서 기본 0~damageGap 뺀 공격력으로 데미지를 조절한다.
         
         String attackerEle = elementAttr;
         String defenserEle = defenser.getElementAttr();
@@ -90,7 +89,8 @@ public class Monster
         int eleEffect = eachComfotable[element.indexOf(attackerEle)][element.indexOf(defenserEle)];
         if(eleEffect > 0) System.out.println("효과는 굉장했다");
         if(eleEffect < 0) System.out.println("효과는 미미했다");
-        damage = damage * ((100+eleEffect*elemntEfftPer)/100);//속성공격
+        System.out.println(damage + ", " + (eleEffect==0?1:(100+eleEffect*elemntEfftPer)/100));
+        damage = (int)(damage * (eleEffect==0?1:(double)(100+eleEffect*elemntEfftPer)/100));//속성공격
         
         return damage;
     }
