@@ -1,5 +1,8 @@
 package com.fakePocketmon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Monster
 {
     private String  monsterName     = "";      //몬스터이름
@@ -25,7 +28,9 @@ public class Monster
      */
     public boolean attack(Monster enemy, int damage)
     {
-        System.out.println(enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        damage = damageCalc(enemy);
+        System.out.println(monsterName + "은(는) " + enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        
         return enemy.attackedByEnemy(damage);
     }
 
@@ -55,6 +60,39 @@ public class Monster
         rtnInfo += "속성 :"         + elementAttr + "\n";
         rtnInfo += "전투가능상태 :" + (battleStatus?"전투가능":"전투불가") + "\n";
         return rtnInfo;
+    }
+    /**
+     * 데미지를 계산해주는 메소드
+     */
+    public int damageCalc(Monster defenser)
+    {
+        ArrayList<String> element = new ArrayList<>(Arrays.asList("전기", "물", "불", "풀"));
+        int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};
+        int damage = 0;
+        
+        int damageGap      = 40;
+        int elemntEfftPer = 10;
+        
+        // 일반공격 범위
+        int attackPointMax = attackPoint;
+        if(attackPointMax - damageGap < 0)
+        {
+            damageGap      = attackPointMax - damageGap;
+        }
+        int attackRange    = (int)(Math.random()*damageGap) +1;
+        
+        damage = attackPointMax - attackRange;// 공격력에서 기본 0~20 뺀 공격력으로 데미지를 조절한다.
+        
+        String attackerEle = elementAttr;
+        String defenserEle = defenser.getElementAttr();
+        
+        //속성공격
+        int eleEffect = eachComfotable[element.indexOf(attackerEle)][element.indexOf(defenserEle)];
+        if(eleEffect > 0) System.out.println("효과는 굉장했다");
+        if(eleEffect < 0) System.out.println("효과는 미미했다");
+        damage = damage * ((100+eleEffect*elemntEfftPer)/100);//속성공격
+        
+        return damage;
     }
     
     public void levelUp()
