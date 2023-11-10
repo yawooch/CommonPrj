@@ -12,8 +12,8 @@ public class Monster
     private String  elementAttr     = "";      //속성
     private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
     private int     level           = 1;       //레벨
-    private int     expMax          = 100;     //경험치Max값
-    private int     expCur          = 0;       //경험치현재값
+    private int     expMax          = 100;     //경험치상한
+    private int     expCur          = 0;       //현재경험치
 
     public Monster()
     {
@@ -69,6 +69,8 @@ public class Monster
     
     /**
      * 데미지를 계산해주는 메소드
+     * 일반데미지 = 몬스터공격력 - (0 ~ damageGap)
+     * 속성데미지 = 일반데미지 * elemntEfftPer
      */
     public int damageCalc(Monster defenser)
     {
@@ -76,7 +78,7 @@ public class Monster
         int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};
         int damage                = 0;
         int damageGap             = 30;
-        int elemntEfftPer         = 20;
+        int elemntEfftPer         = 20;//%
         
         // 일반공격 범위
         int attackPointMax = attackPoint;
@@ -239,7 +241,6 @@ public class Monster
     {
         this.battleStatus = battleStatus;
     }
-
     /**
      * @return the level
      */
@@ -272,4 +273,11 @@ public class Monster
         return expCur;
     }
 
+    /**
+     * @param expCur the expCur to set
+     */
+    public void setExpCur(int expCur)
+    {
+        this.expCur = expCur;
+    }    
 }
