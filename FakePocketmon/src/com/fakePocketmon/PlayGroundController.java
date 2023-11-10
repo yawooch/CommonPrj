@@ -55,8 +55,8 @@ public class PlayGroundController
                     }
                 }
                 
-                Monster enemy = randomMonster();//몬스터를 랜덤으로 생성한다.
-                System.out.println("\n야생의 " + enemy.getMonsterName() + "이(가) 나왔다 뭐할까?");
+                Monster enemy = randomMonster(me);//몬스터를 랜덤으로 생성한다.
+                System.out.println("\n야생의 Lv." + enemy.getLevel() + " " + enemy.getMonsterName() + "이(가) 나왔다 뭐할까?");
                 System.out.println("1. 싸운다");
                 System.out.println("2. 도망간다");
 
@@ -123,9 +123,19 @@ public class PlayGroundController
     /** "피카츄","파이리","꼬부기","이상해씨" 중 랜덤으로 몬스터를생성하여 반환한다.
      * @return Monster
      */
-    public static Monster randomMonster()
+    public static Monster randomMonster(MonsterTrainer me)
     {
         Monster ranMon = null;
+        
+        int randomLv   = (int)(Math.random() * 2);
+        int plusMinus  = (int)(Math.random() * 10);
+        plusMinus      = plusMinus>=7?-1:1;
+        randomLv       = randomLv * plusMinus;
+        
+        
+        int level = (int)(me.getMonstersAvgLevel() - randomLv);
+        
+        if(level < 0) level = 0;
         
         int monSelInt = (int)(Math.random() * 4);
         switch(monSelInt)
@@ -143,6 +153,8 @@ public class PlayGroundController
             ranMon = new GrassMonster(); 
             break;
         }
+        ranMon.setLevel(level);
+        
         return ranMon;
     }
     
@@ -179,7 +191,7 @@ public class PlayGroundController
             break;
         }
         selMonName = monsArr[monSelInt-1];
-        System.out.println(selMonName + "! 넌 내꺼야~!");
+        System.out.println("\n" + selMonName + "! 넌 내꺼야~!");
         System.out.println("출발하자~\n");
     }
 }

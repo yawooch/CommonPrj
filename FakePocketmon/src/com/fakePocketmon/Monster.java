@@ -11,6 +11,9 @@ public class Monster
     private int     attackPoint     = 0;       //공격력
     private String  elementAttr     = "";      //속성
     private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
+    private int     level           = 1;       //레벨
+    private int     expMax          = 100;     //경험치Max값
+    private int     expCur          = 0;       //경험치현재값
 
     public Monster()
     {
@@ -29,7 +32,7 @@ public class Monster
     public boolean attack(Monster enemy, int damage)
     {
         damage = damageCalc(enemy);
-        System.out.println(monsterName + "은(는) " + enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        System.out.println(monsterName + "는(은) " + enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
         
         return enemy.attackedByEnemy(damage);
     }
@@ -41,7 +44,7 @@ public class Monster
         
         if(healthPoint <= 0)
         {
-            System.out.println(monsterName + "은(는) 전투불능이 되었다.");
+            System.out.println(monsterName + "는(은) 전투불능이 되었다.");
             battleStatus = false;
         }
         
@@ -54,13 +57,16 @@ public class Monster
         String rtnInfo = "";
         
         rtnInfo += "\n";
-        rtnInfo += "몬스터이름 : "  + monsterName + "\n";
-        rtnInfo += "HP :"           + healthPoint + "\n";
-        rtnInfo += "공격력 :"       + attackPoint + "\n";
-        rtnInfo += "속성 :"         + elementAttr + "\n";
-        rtnInfo += "전투가능상태 :" + (battleStatus?"전투가능":"전투불가") + "\n";
+        rtnInfo += "몬스터이름   : " + monsterName + "\n";
+        rtnInfo += "level        : " + level       + "\n";
+        rtnInfo += "HP           : " + healthPoint + " / " + healthPointMax + "\n";
+        rtnInfo += "공격력       : " + attackPoint + "\n";
+        rtnInfo += "속성         : " + elementAttr + "\n";
+        rtnInfo += "경험치       : " + expCur + " / " + expMax + "\n";
+        rtnInfo += "전투가능상태 : " + (battleStatus?"전투가능":"전투불가") + "\n";
         return rtnInfo;
     }
+    
     /**
      * 데미지를 계산해주는 메소드
      */
@@ -93,13 +99,47 @@ public class Monster
         
         return damage;
     }
-    
-    public void levelUp()
+
+    /** 경험치에 대한 부분은 제외하고 능력치와 레벨과 관련된 것만 상승시킨다
+     * @param decreseLv the level to set
+     */
+    public void setLevel(int decreseLv)
     {
-         
+        int attkGrowthRate = 20;//공격력 상승률(%)
+        int hpGrowthRate   = 50;//체력   상승률(%)
+        int plusMinus      = decreseLv > 0?1:(decreseLv < 0?-1:0) ;//decreseLv 의 음수양수 표시
+
+        attackPoint  = attackPoint  * (100 + plusMinus*attkGrowthRate)/100;
+        hpGrowthRate = hpGrowthRate * (100 + plusMinus*attkGrowthRate)/100;
+        
+        this.level = this.level + decreseLv;
     }
 
     
+    /** 상대 몬스터의 정보를 전달받아 레벨과 비교하여 경험치를 증가시킨다
+     * @param expCur the expCur to set
+     */
+    public void setExpCur(Monster enemy)
+    {
+        int levelDiff     = enemy.getLevel() - level;
+        int expGrowthRate = 20;//경험치 증가율(%) & 레벨업시, Max경험치 증가율(%)
+        int expCur = (int)(10 * (double)((100 + expGrowthRate*levelDiff)/100));
+        this.expCur = this.expCur + expCur;// 현재 경험치에 획득 경험치를 더해준다.
+        int overExp = this.expCur - this.expMax; 
+        
+        System.out.println(monsterName + "는(은) 경험치 " + expCur + "를 획득했다!");
+        //TODO : 상극 속성을 이기면 보너스...?
+        //Max 경험치를 초과하면 Level Up!
+        if(overExp >= 0)
+        {
+            int level   = this.expMax / this.expCur; 
+            this.expMax = this.expMax * (100 + expGrowthRate)/100;//expGrowthRate만큼 expMax 증가
+            this.expCur = overExp;
+
+            System.out.println(monsterName + "의 레벨이" + level + " 상승했습니다!");
+            setLevel(level);
+        }
+    }
     /*********************************** getter / setter **********************************************/
     
     /**
@@ -199,6 +239,37 @@ public class Monster
     {
         this.battleStatus = battleStatus;
     }
-    
+
+    /**
+     * @return the level
+     */
+    public int getLevel()
+    {
+        return level;
+    }
+
+    /**
+     * @return the expMax
+     */
+    public int getExpMax()
+    {
+        return expMax;
+    }
+
+    /**
+     * @param expMax the expMax to set
+     */
+    public void setExpMax(int expMax)
+    {
+        this.expMax = expMax;
+    }
+
+    /**
+     * @return the expCur
+     */
+    public int getExpCur()
+    {
+        return expCur;
+    }
 
 }
