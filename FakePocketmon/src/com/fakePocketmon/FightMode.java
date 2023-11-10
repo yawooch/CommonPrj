@@ -111,7 +111,7 @@ public class FightMode
                         //다음 주자가 있는지 확인
                         if(isFightable(me))
                         {
-                            System.out.println("돌아와!  "+ currMonster +"!");
+                            System.out.println("돌아와!  "+ currMonster.getMonsterName() +"!");
                         }
                     }
                     turningCoin = !turningCoin;//턴을 돌려준다.

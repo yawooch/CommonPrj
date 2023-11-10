@@ -179,7 +179,7 @@ public class PlayGroundController
             break;
         }
         selMonName = monsArr[monSelInt-1];
-        System.out.println(selMonName + "! 넌 내꺼야~!");
+        System.out.println("\n" + selMonName + "! 넌 내꺼야~!");
         System.out.println("출발하자~\n");
     }
 }
