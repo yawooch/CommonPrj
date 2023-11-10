@@ -89,7 +89,6 @@ public class Monster
         int eleEffect = eachComfotable[element.indexOf(attackerEle)][element.indexOf(defenserEle)];
         if(eleEffect > 0) System.out.println("효과는 굉장했다");
         if(eleEffect < 0) System.out.println("효과는 미미했다");
-        System.out.println(damage + ", " + (eleEffect==0?1:(100+eleEffect*elemntEfftPer)/100));
         damage = (int)(damage * (eleEffect==0?1:(double)(100+eleEffect*elemntEfftPer)/100));//속성공격
         
         return damage;
