@@ -37,7 +37,6 @@ public class MonsterTrainer
     {
         double remainHealth = (double)sparePartner.getHealthPoint() / (double)sparePartner.getHealthPointMax()*100;// 남은 HP % 로 계산
         System.out.println(sparePartner.getHealthPoint()+ " / " + sparePartner.getHealthPointMax());// 남은 HP % 로 계산
-        System.out.println("남은 체력 : "+ remainHealth + "%");
         //체력이 20% 초과로 남았을 때는 잡을수 없다.
         if(remainHealth > 20 && monsterBalls.size() != 0)
         {
@@ -136,8 +135,8 @@ public class MonsterTrainer
      */
     public void setExperiencePoint(Monster enemy)
     {
-        int expGrowthRate = 20; //경험치 증가율
-        int gainExp       = 20; // 얻은경험치
+        int expGrowthRate = 10; //경험치 증가율
+        int gainExp       = 10; // 얻은경험치
         double myMonLv    = getMonstersAvgLevel();//보유 몬스터 레벨의 평균을 구한다.
         
         //강한상대를 이기면 expGrowthRate % 더준다.
@@ -149,7 +148,7 @@ public class MonsterTrainer
         
         int overExp = this.experiencePoint - this.experiencePointMax;
         
-        System.out.println(trainerName + "는(은) 경험치 " + experiencePoint + "를 획득했다!");
+        System.out.println(trainerName + "는(은) 경험치 " + gainExp + "를 획득했다!");
         //Max 경험치를 초과하면 Level Up!
         if(overExp >= 0)
         {

@@ -89,8 +89,11 @@ public class PlayGroundController
                     break;
                 }
                 System.out.println("\n잡은 몬스터 상태를 본다.(누구를 볼까?)");
+                
                 List<Monster> trainersMons = me.getMonsterBalls();
+                
                 int index = 1;
+                
                 //보유몬스터 목록을 만들어준다
                 for(Monster trainersMon : trainersMons)
                 {
@@ -108,8 +111,20 @@ public class PlayGroundController
                     System.out.println("잘못된 선택입니다.");
                     break;
                 }
+                int monsIndex = parseDecision-1;
                 
-                System.out.println(trainersMons.get(parseDecision-1).printInfo());
+                System.out.println(trainersMons.get(monsIndex).printInfo());
+                System.out.println("1. 풀어준다");
+                System.out.println("2. 메뉴로 돌아간다");
+                nextVal = sc.next();
+                sc.nextLine();
+                parseDecision = Integer.parseInt(String.valueOf(nextVal.charAt(0))); 
+                if(parseDecision == 1)
+                {
+                    System.out.println("잘살아야 되! " + trainersMons.get(monsIndex).getMonsterName() +"!\n");
+                    trainersMons.remove(monsIndex);
+                }
+                
                 break;
             //9. 여행을 종료한다
             case 9 :
@@ -133,11 +148,11 @@ public class PlayGroundController
         randomLv       = randomLv * plusMinus;
         
         
-        int level = (int)(me.getMonstersAvgLevel() - randomLv);
+        int level      = (int)(me.getMonstersAvgLevel() - randomLv);
+        level          = level < 0?0:level;
         
-        if(level < 0) level = 0;
+        int monSelInt  = (int)(Math.random() * 4);
         
-        int monSelInt = (int)(Math.random() * 4);
         switch(monSelInt)
         {
         case 0 :
@@ -153,7 +168,7 @@ public class PlayGroundController
             ranMon = new GrassMonster(); 
             break;
         }
-        ranMon.setLevel(level);
+        ranMon.setLevel(level);//생성된 몬스터를 
         
         return ranMon;
     }

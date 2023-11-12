@@ -111,16 +111,17 @@ public class FightMode
                 //0 ~ 9까지의 랜덤 함수 실행
                 //0은 도망을 선택한다(10%확률로 도망)
                 int actionInt = (int)(Math.random() * 10);
-                System.out.println("Lv. " + enemy.getLevel() + " " + enemy.getMonsterName() + "의 체력 : " + enemy.getHealthPoint() +"/" + enemy.getHealthPointMax());
+                System.out.println("Lv." + enemy.getLevel() + " " + enemy.getMonsterName() + "의 체력 : " + enemy.getHealthPoint() +"/" + enemy.getHealthPointMax());
                 if(actionInt == 0)
                 {
-                    System.out.println(enemy.getMonsterName() + "는(은) 전의를 잃고 도망쳤다.");
+                    System.out.println("적의 " + enemy.getMonsterName() + "는(은) 전의를 잃고 도망쳤다.\n");
                     currMonster.setExpCur(enemy);//적이 도망가도 경험치를 준다.
                     turningCoin = !turningCoin;//턴을 돌려준다.
                     enemy.setBattleStatus(false);
                 }
                 else
                 {
+                    System.out.print("적의 ");
                     //attack 메소드는 상태의 전투상태를 반환한다.
                     boolean currMonStatus = enemy.attack(currMonster, enemy.getAttackPoint());
 

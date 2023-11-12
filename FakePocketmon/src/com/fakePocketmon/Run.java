@@ -5,7 +5,7 @@ public class Run
     public static void main(String[] args)
     {
         MonsterTrainer me = new MonsterTrainer();
-        me.setTrainerLevel(12);
+//        me.setTrainerLevel(12);
         FlameMonster mon = new FlameMonster();
         mon.setLevel(2);
         me.addMonster(mon);
