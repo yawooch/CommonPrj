@@ -1,7 +1,11 @@
 package com.fakePocketmon;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+
+import com.fakePocketmon.data.ReadMonsterInfo;
 
 public class PlayGroundController
 {
@@ -135,7 +139,7 @@ public class PlayGroundController
         }
     }
 
-    /** "피카츄","파이리","꼬부기","이상해씨" 중 랜덤으로 몬스터를생성하여 반환한다.
+    /** 랜덤으로 몬스터를생성하여 반환한다.
      * @return Monster
      */
     public static Monster randomMonster(MonsterTrainer me)
@@ -153,6 +157,9 @@ public class PlayGroundController
         
         int monSelInt  = (int)(Math.random() * 4);
         
+        Object[] monsters = ReadMonsterInfo.getSameTypeMonList(ReadMonsterInfo.ELEMENTS[monSelInt]);
+        Map<String, String> monsterAbility = ReadMonsterInfo.getMonAbility(monsters[(int)(Math.random() * (monsters.length))].toString());
+        
         switch(monSelInt)
         {
         case 0 :
@@ -168,7 +175,12 @@ public class PlayGroundController
             ranMon = new GrassMonster(); 
             break;
         }
-        ranMon.setLevel(level);//생성된 몬스터를 
+        
+        ranMon.setHealthPointMax(Integer.parseInt(monsterAbility.get("HEALTH_POINT_MAX")));
+        ranMon.setAttackPoint(Integer.parseInt(monsterAbility.get("ATTACK_POINT")));
+        ranMon.setMonsterName(monsterAbility.get("MONSTER_NAME"));
+        
+        ranMon.setLevel(level);//생성된 몬스터의 레벨을 설정해준다.
         
         return ranMon;
     }
@@ -181,6 +193,7 @@ public class PlayGroundController
     {
         String[] monsArr  = {"피카츄","파이리","꼬부기","이상해씨"};
         String selMonName = "";
+        Map<String, String> monsAbility;
         Scanner sc        = new Scanner(System.in); 
         //배열에 있는 몬스터 선택지를 출력한다.
         for (int i = 1; i <= monsArr.length; i++)
@@ -193,15 +206,40 @@ public class PlayGroundController
         switch(monSelInt)
         {
         case 1 :
-            me.catchMonster(new LightningMonster()); 
+            LightningMonster pikachu = new LightningMonster();
+            monsAbility = ReadMonsterInfo.getMonAbility("피카츄");
+            
+            pikachu.setHealthPointMax(Integer.parseInt(monsAbility.get("HEALTH_POINT_MAX")));
+            pikachu.setAttackPoint(Integer.parseInt(monsAbility.get("ATTACK_POINT")));
+            
+            me.catchMonster(pikachu); 
             break;
         case 2 :
-            me.catchMonster(new FlameMonster()); 
+            FlameMonster firey = new FlameMonster();
+            monsAbility = ReadMonsterInfo.getMonAbility("파이리");
+            
+            firey.setHealthPointMax(Integer.parseInt(monsAbility.get("HEALTH_POINT_MAX")));
+            firey.setAttackPoint(Integer.parseInt(monsAbility.get("ATTACK_POINT")));
+            
+            me.catchMonster(firey); 
             break;
         case 3 :
-            me.catchMonster(new WaterMonster()); 
+            WaterMonster ggobugi = new WaterMonster();
+            monsAbility = ReadMonsterInfo.getMonAbility("꼬부기");
+            
+            ggobugi.setHealthPointMax(Integer.parseInt(monsAbility.get("HEALTH_POINT_MAX")));
+            ggobugi.setAttackPoint(Integer.parseInt(monsAbility.get("ATTACK_POINT")));
+            
+            me.catchMonster(ggobugi); 
             break;
         case 4 :
+            GrassMonster strageSeed = new GrassMonster();
+            monsAbility = ReadMonsterInfo.getMonAbility("이상해씨");
+            
+            strageSeed.setHealthPointMax(Integer.parseInt(monsAbility.get("HEALTH_POINT_MAX")));
+            strageSeed.setAttackPoint(Integer.parseInt(monsAbility.get("ATTACK_POINT")));
+            
+            me.catchMonster(strageSeed); 
             me.catchMonster(new GrassMonster()); 
             break;
         }

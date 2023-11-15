@@ -3,7 +3,7 @@ package com.fakePocketmon;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonsterTrainer
+public class MonsterTrainer implements LevelUpable
 { 
     private String trainerName         = "";     //트레이너 네임 
     private int experiencePoint        = 0;      //현재경험치 

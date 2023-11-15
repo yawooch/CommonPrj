@@ -3,7 +3,7 @@ package com.fakePocketmon;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Monster
+public class Monster implements LevelUpable
 {
     private String  monsterName     = "";      //몬스터이름
     private int     healthPoint     = 0;       //생명포인트
@@ -205,8 +205,6 @@ public class Monster
      */
     public void setAttackPoint(int attackPoint)
     {
-        int diff =  attackPoint - this.attackPoint;
-        System.out.println("공격력이 "+ diff + "으로 되었다.");
         this.attackPoint = attackPoint;
     }
 
