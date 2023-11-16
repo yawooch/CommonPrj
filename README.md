@@ -1,10 +1,14 @@
 # CommonPrj
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ##FakePocketmon
 =======
 ## FakePocketmon
 >>>>>>> 9ce65d5 (주석 정리 Ver 1.0 시작 (+9 squashed commit))
+=======
+## FakePocketmon
+>>>>>>> d9f0da2fd24c969efb691f777365bcc9f5fd9ec5
 1. 일단 클래스 다이어그램만 올렸
 2. 메소드 정의서는 추후 pdf 형식으로 재업로드 예정
 3. 올려진 코드는 PlayGroundController 에서 실행하면 됨(package 분할따위업ㅍ따..) - 좋은 코드 있으면 알려주세요
