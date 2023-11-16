@@ -5,6 +5,6 @@ public class GrassMonster extends Monster
     public GrassMonster()
     {
         super.setMonsterName("이상해씨");
-        super.setElementAttr("초식");
+        super.setElementAttr("풀");//풀
     }
 }

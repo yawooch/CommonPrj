@@ -1,0 +1,101 @@
+'+ FightMode
+    '+ startFight(MonsterTrainer me, Monster enemy) : void
+    /**
+     * 싸움실행 메인 트레이너 VS 몬스터
+     * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
+     * 턴제 방식 요약
+     * 반복문 초반의 전투상태 확인 메소드로 인해 둘중 하나가 전투불가되면 반복문이 종료되게한다.
+     * boolean(이 적합)으로 내 차례와 상태차례를 반전시키면 반복문을 실행
+     */
+    '+ isFightable(Monster monster) : boolean
+    /**
+     * 몬스터의 전투가능상태를 반환한다.
+     * false : 전투불가, true : 전투가능
+     * @param monster
+     * @return boolean
+     */
+    '+ isFightable(MonsterTrainer trainer) : boolean
+    /** 트레이너의 전투가능상태를 반환한다.
+     * false : 전투불가, true : 전투가능
+     * @param trainer
+     * @return boolean
+     */
+
+    '+ whoIsWinner(MonsterTrainer trainer, Monster monster) : String
+    /**
+     * 두선수의 상태를 파악해서 승자를 판단한다.
+     * @param endFight
+     * @param trainer
+     * @param monster
+     * @return 승자
+     */
+class Monster
+    '+ Monster()
+        //this.healthPoint  = healthPointMax;
+        //this.attackPoint  = (int)기본설정;
+        //this.elementAttr  = 임시 속성 고정값
+        //this.monsterName  = 임시 속성 고정값
+        //this.battleStatus = true;
+
+    '+ attack(Monster enemy, int damage) : boolean
+
+    - attackedByEnemy(int damage) : boolean
+    //적에게 데미지를 전달받으면 healthPoint를 감소시키는 메소드, 내부에서만 사용하자
+
+    //몬스터의 정보를 출력해주는 메소드
+    '+ printInfo() : String
+
+
+    //그외 getter/setter 는 생략한다.
+
+
+class MonsterTrainer
+
+    '+ MonsterTrainer()
+    // 
+
+    '+ healthReset() : void
+    /** 전투시작전에 이전에 싸움이 있었다면 떨어진 체력을 리셋하는 메소드 */
+
+    '+ catchMonster(Monster sparePartner) : boolean
+    /**
+     * 트레이너가 몬스터를 잡아서 monsterBalls 에 add 하는 메소드
+     * 잡을 대상의 체력이 20 % 이상이면 잡을수 없다
+     * @param Monster
+     * @return boolean 몬스터 포획의 결과값 반환 true :
+     */
+
+    /** 단순히 monsterBalls 에 몬스터를 넣기위한 메소드 */
+    '+ addMonster(Monster sparePartner) : boolean
+
+    '+ getTtrainerName() : String
+
+    '+ getMonsterBalls() : List<Monster>
+    '+ getMonsterBallCount() : int
+    '+ printInfo() : String
+    //필드정보를 출력해주는 메소드
+    트레이너이름, 트레이너레벨, 경험치, 잡은몬스터 수
+    
+'+ class PlayGroundController
+    '+ main(String[] args) : void
+
+    '+ randomMonster() : Monster 
+
+    '+ selectMonster(MonsterTrainer me) : void 
+    /** "피카츄","파이리","꼬부기","이상해씨" 를 String 배열로 만들어 선택하고 트레이터 몬스터 볼에 넣는다.
+     * @param me
+     */
+        //"피카츄","파이리","꼬부기","이상해씨" 를 배열로 선언한다.
+        //배열에 있는 몬스터 선택지를 출력한다.
+        //Scanner 로 입력받은 값에 해당하는 몬스터를 addMonster해준다.
+        //System.out.println(selMonName '+ "! 넌 내꺼야~!");
+        //System.out.println("출발하자~");
+
+'+ class FlameMonster
+    '+ FlameMonster()
+'+ class GrassMonster
+    '+ GrassMonster()
+'+ class LightningMonster
+    '+ LightningMonster()
+'+ class WaterMonster
+    '+ WaterMonster()
