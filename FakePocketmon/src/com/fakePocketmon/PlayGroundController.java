@@ -50,7 +50,7 @@ public class PlayGroundController
                     {
                     //1. yes
                     case 1 :
-                        //몬스터 선택 메
+                        //몬스터 선택 메뉴
                         selectMonster(me);
                         break;
                     //2. no
@@ -59,8 +59,17 @@ public class PlayGroundController
                     }
                 }
                 
-                Monster enemy = randomMonster(me);//몬스터를 랜덤으로 생성한다.
-                System.out.println("\n야생의 Lv." + enemy.getLevel() + " " + enemy.getMonsterName() + "이(가) 나왔다 뭐할까?");
+//                Monster enemy = randomMonster(me.getMonstersAvgLevel());//몬스터를 랜덤으로 생성한다.
+                MonsterTrainer enemy = randomTrainer(me.getMonstersAvgLevel());//트레이너를 랜덤으로 생성한다.
+//                if(enemy instanceof Monster)
+//                {
+//                    System.out.println("\n야생의 Lv." + enemy.getLevel() + " " + enemy.getName() + "이(가) 나왔다 뭐할까?");
+//                }
+                if(enemy instanceof MonsterTrainer)
+                {
+                    System.out.println("\n트레이너 Lv." + enemy.getLevel() + " " + enemy.getName() + " 씨가 도전해왔다 어떡할까?");
+                }
+                
                 System.out.println("1. 싸운다");
                 System.out.println("2. 도망간다");
 
@@ -71,11 +80,11 @@ public class PlayGroundController
                 {
                 case 1 :
                     FightMode fightMode = new FightMode();
-                    fightMode.startFight(me, enemy);
+                    fightMode.startFightMain(me, enemy);
                     //FightMode.randomTrainer()
                     break;
                 case 2 :
-                    System.out.println(me.getTtrainerName() + "는(은) 도망쳤다");
+                    System.out.println(me.getName() + "는(은) 도망쳤다");
                     break;
                 }
                 break;
@@ -101,7 +110,7 @@ public class PlayGroundController
                 //보유몬스터 목록을 만들어준다
                 for(Monster trainersMon : trainersMons)
                 {
-                    System.out.println(index + ". " + trainersMon.getMonsterName());
+                    System.out.println(index + ". " + trainersMon.getName());
                     index++;
                 }
 
@@ -125,7 +134,7 @@ public class PlayGroundController
                 parseDecision = Integer.parseInt(String.valueOf(nextVal.charAt(0))); 
                 if(parseDecision == 1)
                 {
-                    System.out.println("잘살아야 되! " + trainersMons.get(monsIndex).getMonsterName() +"!\n");
+                    System.out.println("잘살아야 되! " + trainersMons.get(monsIndex).getName() +"!\n");
                     trainersMons.remove(monsIndex);
                 }
                 
@@ -142,7 +151,7 @@ public class PlayGroundController
     /** 랜덤으로 몬스터를생성하여 반환한다.
      * @return Monster
      */
-    public static Monster randomMonster(MonsterTrainer me)
+    public static Monster randomMonster(double myLevel)
     {
         Monster ranMon = null;
         
@@ -152,7 +161,7 @@ public class PlayGroundController
         randomLv       = randomLv * plusMinus;
         
         
-        int level      = (int)(me.getMonstersAvgLevel() - randomLv);
+        int level      = (int)(myLevel - randomLv);
         level          = level < 0?0:level;
         
         int monSelInt  = (int)(Math.random() * 4);
@@ -178,11 +187,49 @@ public class PlayGroundController
         
         ranMon.setHealthPointMax(Integer.parseInt(monsterAbility.get("HEALTH_POINT_MAX")));
         ranMon.setAttackPoint(Integer.parseInt(monsterAbility.get("ATTACK_POINT")));
-        ranMon.setMonsterName(monsterAbility.get("MONSTER_NAME"));
+        ranMon.setName(monsterAbility.get("MONSTER_NAME"));
         
         ranMon.setLevel(level);//생성된 몬스터의 레벨을 설정해준다.
         
         return ranMon;
+    }
+    /** 랜덤으로 트레이너를생성하여 반환한다.
+     * @return Monster
+     */
+    public static MonsterTrainer randomTrainer(double myLevel)
+    {
+        MonsterTrainer ranTrainer = null;
+        
+        String[] firstName   = {"김" , "이" , "박" , "최" , "정" , "강" , "조" , "윤" , "장" , "임" , "한" , "오" , "서" , "신" , "권" , "황" , "안" , "송" , "전" , "홍" , "유" , "고" , "문" , "양" , "손" , "배" , "조" , "백" , "허" , "유" , "남" , "심" , "노" , "정" , "하" , "곽" , "성" , "차" , "주" , "우" , "구" , "신" , "임" , "전" , "민" , "유" , "류" , "나" , "진" , "지" , "엄" , "채" , "원" , "천" , "방" , "공" , "강" , "현" , "함" , "변" , "염" , "양" , "변" , "여" , "추" , "노" , "도" , "소" , "신" , "석" , "선" , "설" , "마" , "길" , "주" , "연" , "방" , "위" , "표" , "명" , "기" , "반" , "라" , "왕" , "금" , "옥" , "육" , "인" , "맹" , "제" , "모" , "장" , "남궁" , "탁" , "국" , "여" , "진" , "어"};
+        String[] krName      = {"길동", "개똥","국뽕","백만불", "안테나","것다","까따","하다", "성","나르샤", "현아", "동일" , "중기" , "홍철" , "은이" , "재석" , "준하" , "나라" , "이유" , "혜수" , "봉선" , "은혜" , "형돈" , "쯔위" , "동훈" , "명수" , "프콘" , "태현" , "태연" , "지현" , "효리" , "시완"};
+        String[] animalName  = {"어흥","코끼리", "멍멍", "야옹", "짹짹", "까악", "원숭", "삐약" ,"꿀꿀" ,"히잉" ,"윙윙" ,"꺆꺆" ,"닭" ,"구구" ,"매미" ,"개굴" ,"말벌"};
+        String[] lastName    = animalName.clone();
+        String rtnName;
+        
+        rtnName  = firstName[(int)(Math.random()* firstName.length)];
+        rtnName += lastName[(int)(Math.random()* lastName.length)];
+        
+        
+        ranTrainer = new MonsterTrainer(rtnName); 
+        
+        int randomLv   = (int)(Math.random() * 2);
+        int plusMinus  = (int)(Math.random() * 10);
+        plusMinus      = plusMinus>=7?-1:1;
+        randomLv       = randomLv * plusMinus;
+        
+        
+        int level      = (int)(myLevel - randomLv);
+        level          = level < 0?0:level;
+
+        ranTrainer.setLevel(level);//생성된 몬스터의 레벨을 설정해준다.
+        
+        for(int i = 0 ; i < (int)(Math.random()*ranTrainer.getMonsterBallsMax())+1; i ++)
+        {
+            ranTrainer.addMonster(randomMonster(myLevel));
+        }
+        
+        
+        return ranTrainer;
     }
     
     /** "피카츄","파이리","꼬부기","이상해씨" 를 String 배열로 만들어 선택하고 트레이터 몬스터 볼에 넣는다.

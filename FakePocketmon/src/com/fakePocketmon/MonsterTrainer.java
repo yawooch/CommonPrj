@@ -3,18 +3,20 @@ package com.fakePocketmon;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MonsterTrainer implements LevelUpable
+public class MonsterTrainer extends Animal implements LevelUpable
 { 
-    private String trainerName         = "";     //트레이너 네임 
-    private int experiencePoint        = 0;      //현재경험치 
-    private int experiencePointMax     = 100;    //경험치상한
     private int monsterBallsMax        = 3;      //잡을수 있는 몬스터수
-    private int trainerLevel           = 1;      //트레이너레벨
+    private int level                  = 1;      //트레이너레벨
     private List<Monster> monsterBalls = null;   //잡을수 있는 몬스터수 
     
     public MonsterTrainer()
     {
-        trainerName  = "지우";
+        super.name         = "지우";
+        monsterBalls = new ArrayList<Monster>();
+    }
+    public MonsterTrainer(String name)
+    {
+        super.name         = name;
         monsterBalls = new ArrayList<Monster>();
     }
 
@@ -37,6 +39,12 @@ public class MonsterTrainer implements LevelUpable
     {
         double remainHealth = (double)sparePartner.getHealthPoint() / (double)sparePartner.getHealthPointMax()*100;// 남은 HP % 로 계산
         System.out.println(sparePartner.getHealthPoint()+ " / " + sparePartner.getHealthPointMax());// 남은 HP % 로 계산
+        //이미 주인이 있는경우
+        if(!sparePartner.getTrainerName().equals(""))
+        {
+            System.out.println("이미 트레이너가 있는 몬스터는 잡을수 없다!!\n"+ sparePartner.getTrainerName() + " : 뭐하는 짓이야!");
+            return false;
+        }
         //체력이 20% 초과로 남았을 때는 잡을수 없다.
         if(remainHealth > 20 && monsterBalls.size() != 0)
         {
@@ -51,9 +59,9 @@ public class MonsterTrainer implements LevelUpable
         }
             
         // TODO : 포획률 기능 추가하면...?
-        System.out.println(sparePartner.getMonsterName() + "을(를) 잡았다!!");
+        System.out.println(sparePartner.getName() + "을(를) 잡았다!!");
         sparePartner.setBattleStatus(false);
-        monsterBalls.add(sparePartner);
+        addMonster(sparePartner);
         return true;
     }
 
@@ -61,15 +69,10 @@ public class MonsterTrainer implements LevelUpable
     public boolean addMonster(Monster sparePartner)
     {
         monsterBalls.add(sparePartner);
+        sparePartner.setTrainerName(getName());
         return true;
     }
-    
-    /** 트레이너의 이름을 가져온다. */
-    public String getTtrainerName()
-    {
-        return trainerName;
-    }
-    
+        
     /** 트레이너가 보유하고 있는 몬스터 목록을 반환한다 */
     public List<Monster> getMonsterBalls()
     {
@@ -87,14 +90,11 @@ public class MonsterTrainer implements LevelUpable
     {
         String rtnInfo = "";
         
-        rtnInfo += "\n";
-        rtnInfo += "트레이너이름 : "  + trainerName  + "\n";
-        rtnInfo += "트레이너레벨 : "  + trainerLevel + "\n";
-        rtnInfo += "경험치 :"         + experiencePoint +"/" + experiencePointMax  +"\n";
-        rtnInfo += "잡은몬스터 수 :"  + monsterBalls.size()  +"/" + monsterBallsMax  + "\n";
+        rtnInfo += super.printInfo();
+        rtnInfo += "트레이너레벨  : "  + level + "\n";
+        rtnInfo += "잡은몬스터 수 : "  + monsterBalls.size()  +"/" + monsterBallsMax  + "\n";
         return rtnInfo;
     }
-
 
     
     /** 보유 몬스터 레벨의 평균을 구한다.
@@ -113,93 +113,62 @@ public class MonsterTrainer implements LevelUpable
     }
 
     /**
-     * @param trainerLevel the trainerLevel to set
+     * @param level the trainerLevel to set
      */
-    public void setTrainerLevel(int decreseLv)
+    public void setLevel(int decreseLv)
     {
-        this.trainerLevel = this.trainerLevel + decreseLv;
+        this.level = this.level + decreseLv;
         
         //2의 배수 레벨마다 소지가능한 몬스터볼의 수가 늘어난다. 
-        if(this.trainerLevel%2 == 0 && decreseLv > 0)
+        if(this.level%2 == 0 && decreseLv > 0)
         {
             this.monsterBallsMax = this.monsterBallsMax + 1;
         } 
-        if(this.trainerLevel%2 == 0 && decreseLv < 0)
+        if(this.level%2 == 0 && decreseLv < 0)
         {
             this.monsterBallsMax = this.monsterBallsMax - 1;
         }
     }
     
     /**
-     * @param experiencePoint the experiencePoint to set
+     * @param expCur the expCur to set
      */
-    public void setExperiencePoint(Monster enemy)
+    public void setExpCur(Object enemy)
     {
+        int enemyLevel = 0;
+        if(enemy instanceof Monster)
+        {
+            enemyLevel = ((Monster)enemy).getLevel();
+        }
+        if(enemy instanceof MonsterTrainer)
+        {
+            enemyLevel = ((MonsterTrainer)enemy).getLevel();
+        }
+        
         int expGrowthRate = 10; //경험치 증가율
         int gainExp       = 10; // 얻은경험치
         double myMonLv    = getMonstersAvgLevel();//보유 몬스터 레벨의 평균을 구한다.
         
         //강한상대를 이기면 expGrowthRate % 더준다.
-        if(myMonLv < enemy.getLevel())
+        if(myMonLv < enemyLevel)
         {
             gainExp = gainExp * (100+expGrowthRate)/100;
         }
-        this.experiencePoint = this.experiencePoint + gainExp;
+        this.expCur = this.expCur + gainExp;
         
-        int overExp = this.experiencePoint - this.experiencePointMax;
+        int overExp = this.expCur - this.expMax;
         
-        System.out.println(trainerName + "는(은) 경험치 " + gainExp + "를 획득했다!");
+        System.out.println(name        + "는(은) 경험치 " + gainExp + "를 획득했다!");
         //Max 경험치를 초과하면 Level Up!
         if(overExp >= 0)
         {
-            int level = this.experiencePoint/this.experiencePointMax;
-            this.experiencePointMax = this.experiencePointMax * (100 + expGrowthRate)/100;//expGrowthRate만큼 expMax 증가
-            this.experiencePoint = overExp;
+            int level = this.expCur/this.expMax;
+            this.expMax = this.expMax * (100 + expGrowthRate)/100;//expGrowthRate만큼 expMax 증가
+            this.expCur = overExp;
 
-            System.out.println(trainerName + "의 레벨이" + level + " 상승했습니다!");
-            setTrainerLevel(level);
+            System.out.println(name        + "의 레벨이" + level + " 상승했습니다!");
+            setLevel(level);
         }
-    }
-    
-    
-    /**
-     * @return the trainerName
-     */
-    public String getTrainerName()
-    {
-        return trainerName;
-    }
-
-    /**
-     * @param trainerName the trainerName to set
-     */
-    public void setTrainerName(String trainerName)
-    {
-        this.trainerName = trainerName;
-    }
-
-    /**
-     * @return the experiencePoint
-     */
-    public int getExperiencePoint()
-    {
-        return experiencePoint;
-    }
-
-    /**
-     * @return the experiencePointMax
-     */
-    public int getExperiencePointMax()
-    {
-        return experiencePointMax;
-    }
-
-    /**
-     * @param experiencePointMax the experiencePointMax to set
-     */
-    public void setExperiencePointMax(int experiencePointMax)
-    {
-        this.experiencePointMax = experiencePointMax;
     }
 
     /**
@@ -221,11 +190,10 @@ public class MonsterTrainer implements LevelUpable
     /**
      * @return the trainerLevel
      */
-    public int getTrainerLevel()
+    public int getLevel()
     {
-        return trainerLevel;
+        return level;
     }
-
 
     /**
      * @param monsterBalls the monsterBalls to set

@@ -3,24 +3,24 @@ package com.fakePocketmon;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Monster implements LevelUpable
+import com.fakePocketmon.data.Constants;
+
+public class Monster extends Animal implements LevelUpable
 {
-    private String  monsterName     = "";      //몬스터이름
     private int     healthPoint     = 0;       //생명포인트
     private int     healthPointMax  = 100;     //생명포인트 풀피
     private int     attackPoint     = 0;       //공격력
     private String  elementAttr     = "";      //속성
     private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
     private int     level           = 1;       //레벨
-    private int     expMax          = 100;     //경험치상한
-    private int     expCur          = 0;       //현재경험치
+    private String  trainerName     = "";      //트레이너 이름
 
     public Monster()
     {
         this.healthPoint  = healthPointMax;
         this.attackPoint  = 50;
         this.elementAttr  = "무속성";//임시 속성 고정값
-        this.monsterName  = "이브이";//임시 속성 고정값
+        super.name        = "이브이";//임시 속성 고정값
         this.battleStatus = true;
     }
     
@@ -29,10 +29,9 @@ public class Monster implements LevelUpable
      * @param damage
      * @return
      */
-    public boolean attack(Monster enemy, int damage)
+    public boolean attack(Monster enemy)
     {
-        damage = damageCalc(enemy);
-        System.out.println(monsterName + "는(은) " + enemy.getMonsterName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        int damage                = damageCalc(enemy); 
         
         return enemy.attackedByEnemy(damage);
     }
@@ -44,7 +43,7 @@ public class Monster implements LevelUpable
         
         if(healthPoint <= 0)
         {
-            System.out.println(monsterName + "는(은) 전투불능이 되었다.");
+            System.out.println(name       + "는(은) 전투불능이 되었다.");
             battleStatus = false;
         }
         
@@ -56,13 +55,11 @@ public class Monster implements LevelUpable
     {
         String rtnInfo = "";
         
-        rtnInfo += "\n";
-        rtnInfo += "몬스터이름   : " + monsterName + "\n";
+        rtnInfo += super.printInfo();
         rtnInfo += "level        : " + level       + "\n";
         rtnInfo += "HP           : " + healthPoint + " / " + healthPointMax + "\n";
         rtnInfo += "공격력       : " + attackPoint + "\n";
         rtnInfo += "속성         : " + elementAttr + "\n";
-        rtnInfo += "경험치       : " + expCur + " / " + expMax + "\n";
         rtnInfo += "전투가능상태 : " + (battleStatus?"전투가능":"전투불가") + "\n";
         return rtnInfo;
     }
@@ -74,30 +71,34 @@ public class Monster implements LevelUpable
      */
     public int damageCalc(Monster defenser)
     {
-        ArrayList<String> element = new ArrayList<>(Arrays.asList("전기", "물", "불", "풀"));
-        int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};
-        int damage                = 0;
+        ArrayList<String> element = new ArrayList<>(Arrays.asList(Constants.ELEMENTS));
+        int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};// 속성 상성을 표로 만들어 2차원배열을 넣었다.
         int damageGap             = 30;
         int elemntEfftPer         = 20;//%
+//        String effectString       = ""; 
+        int damage                = 0;
         
         // 일반공격 범위
-        int attackPointMax = attackPoint;
-        if(attackPointMax - damageGap < 0)
+        int attackPointMax = this.attackPoint;
+        damageGap      = attackPointMax - damageGap;
+        if(attackPointMax < damageGap)
         {
-            damageGap      = attackPointMax - damageGap;
+            damageGap      = attackPointMax;
         }
         int attackRange    = (int)(Math.random()*damageGap) +1;
         
         damage = attackPointMax - attackRange;// 공격력에서 기본 0~damageGap 뺀 공격력으로 데미지를 조절한다.
         
-        String attackerEle = elementAttr;
+        String attackerEle = this.elementAttr;
         String defenserEle = defenser.getElementAttr();
+
+        System.out.println(name       + "는(은) " + defenser.getName() + "에게 " + damage + "만큼 데미지를 입혔다.");
         
         //속성공격
         int eleEffect = eachComfotable[element.indexOf(attackerEle)][element.indexOf(defenserEle)];
-        if(eleEffect > 0) System.out.println("효과는 굉장했다");
-        if(eleEffect < 0) System.out.println("효과는 미미했다");
-        damage = (int)(damage * (eleEffect==0?1:(double)(100+eleEffect*elemntEfftPer)/100));//속성공격
+        if(eleEffect > 0) System.out.print("효과는 굉장했다\n");
+        if(eleEffect < 0) System.out.print("효과는 미미했다\n");
+        damage = (int)(damage * (eleEffect==0?1:((double)(100+eleEffect*elemntEfftPer)/100)));//속성공격
         
         return damage;
     }
@@ -125,11 +126,12 @@ public class Monster implements LevelUpable
     {
         int levelDiff     = enemy.getLevel() - level;
         int expGrowthRate = 20;//경험치 증가율(%) & 레벨업시, Max경험치 증가율(%)
-        int expCur = (int)(10 * (double)((100 + expGrowthRate*levelDiff)/100));
+        System.out.println((double)((100 + expGrowthRate*levelDiff)/100));
+        int expCur = (int)((10*(levelDiff==0?1:levelDiff)) * (double)((100 + expGrowthRate*levelDiff)/100));
         this.expCur = this.expCur + expCur;// 현재 경험치에 획득 경험치를 더해준다.
         int overExp = this.expCur - this.expMax; 
         
-        System.out.println(monsterName + "는(은) 경험치 " + expCur + "를 획득했다!");
+        System.out.println(name       + "는(은) 경험치 " + expCur + "를 획득했다!");
         //TODO : 상극 속성을 이기면 보너스...?
         //Max 경험치를 초과하면 Level Up!
         if(overExp >= 0)
@@ -138,28 +140,12 @@ public class Monster implements LevelUpable
             this.expMax = this.expMax * (100 + expGrowthRate)/100;//expGrowthRate만큼 expMax 증가
             this.expCur = overExp;
 
-            System.out.println(monsterName + "의 레벨이" + level + " 상승했습니다!");
+            System.out.println(name       + "의 레벨이 " + level + " 상승했습니다!");
             setLevel(level);
         }
     }
     /*********************************** getter / setter **********************************************/
     
-    /**
-     * @return the monsterName
-     */
-    public String getMonsterName()
-    {
-        return monsterName;
-    }
-
-    /**
-     * @param monsterName the monsterName to set
-     */
-    public void setMonsterName(String monsterName)
-    {
-        this.monsterName = monsterName;
-    }
-
     /**
      * @return the healthPoint
      */
@@ -239,6 +225,7 @@ public class Monster implements LevelUpable
     {
         this.battleStatus = battleStatus;
     }
+    
     /**
      * @return the level
      */
@@ -248,34 +235,19 @@ public class Monster implements LevelUpable
     }
 
     /**
-     * @return the expMax
+     * @return the trainerName
      */
-    public int getExpMax()
+    public String getTrainerName()
     {
-        return expMax;
+        return trainerName;
     }
 
     /**
-     * @param expMax the expMax to set
+     * @param trainerName the trainerName to set
      */
-    public void setExpMax(int expMax)
+    public void setTrainerName(String trainerName)
     {
-        this.expMax = expMax;
+        this.trainerName = trainerName;
     }
 
-    /**
-     * @return the expCur
-     */
-    public int getExpCur()
-    {
-        return expCur;
-    }
-
-    /**
-     * @param expCur the expCur to set
-     */
-    public void setExpCur(int expCur)
-    {
-        this.expCur = expCur;
-    }    
 }

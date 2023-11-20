@@ -9,24 +9,33 @@ public class FightMode
     /**
      * 싸움실행 메인 트레이너 VS 몬스터
      * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
+     * @param <T>
+     */
+    public void startFightMain(MonsterTrainer me, Object  enemy)
+    {
+        System.out.print("싸움실행 메인");
+        
+        if(enemy instanceof Monster)
+        {
+            startFight(me,(Monster)enemy);
+        }
+        if(enemy instanceof MonsterTrainer)
+        {
+            startFight(me,(MonsterTrainer)enemy);
+        }
+    }
+    /**
+     * 싸움실행 메인 트레이너 VS 몬스터
+     * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
      */
     @SuppressWarnings("resource")
     public void startFight(MonsterTrainer me, Monster enemy)
     {
-        System.out.println("싸움실행 메인 트레이너 VS 몬스터");
+        System.out.println("트레이너 VS 몬스터");
         me.healthReset();// 이전 싸움에서 전투불능된 포켓몬을 다시 체력 리셋한다.
         
         List<Monster> myMonsters = me.getMonsterBalls();
         Monster currMonster      = null; 
-
-        //트레이터 몬스터에서 사용가능한 포켓몬을현재 몬스터로 지정
-        for(Monster myMonster : myMonsters)
-        {
-            if(myMonster.isBattleStatus())
-            {
-                currMonster = myMonster;
-            }
-        }
 
         Scanner sc1 = null;
         while(true)
@@ -39,13 +48,13 @@ public class FightMode
                 if(whoIsWinner(me, enemy) instanceof MonsterTrainer)
                 {
                     MonsterTrainer winner = (MonsterTrainer)whoIsWinner(me, enemy);
-                    winnersName = winner.getTrainerName();
-                    winner.setExperiencePoint(enemy);
+                    winnersName = winner.getName();
+                    winner.setExpCur(enemy);
                 }
                 if(whoIsWinner(me, enemy) instanceof Monster)
                 {
                     Monster winner = (Monster)whoIsWinner(me, enemy);
-                    winnersName = winner.getMonsterName();
+                    winnersName = winner.getName();
                 }
                 
                 System.out.println("\n" + winnersName + "가 승리하였다!!");
@@ -53,7 +62,7 @@ public class FightMode
                 break;
             }
 
-            //트레이터 몬스터에서 사용가능한 포켓몬을현재 몬스터로 지정
+            //me 트레이너 몬스터에서 사용가능한 포켓몬을현재 몬스터로 지정
             for(Monster myMonster : myMonsters)
             {
                 if(myMonster.isBattleStatus())
@@ -68,7 +77,7 @@ public class FightMode
             {
                 //내 차례
                 System.out.println("<나의 차례>");
-                System.out.println("Lv. " + currMonster.getLevel() + " " + currMonster.getMonsterName() + "의 체력 : " + currMonster.getHealthPoint() +"/" + currMonster.getHealthPointMax());
+                System.out.println("Lv. " + currMonster.getLevel() + " " + currMonster.getName() + "의 체력 : " + currMonster.getHealthPoint() +"/" + currMonster.getHealthPointMax());
                 System.out.println("1. 공격");
                 System.out.println("2. 몬스터 볼을 던진다.");
                 System.out.println("3. 도망간다.");
@@ -80,8 +89,8 @@ public class FightMode
                 {
                 //1-1. 공격
                 case 1 :
-                    System.out.println("힘내라 !!" + currMonster.getMonsterName());
-                    boolean isWin = !currMonster.attack(enemy, currMonster.getAttackPoint());
+                    System.out.println("힘내라 !!" + currMonster.getName());
+                    boolean isWin = !currMonster.attack(enemy);
                     
                     //상대를 쓰러뜨렸으면 경험치를 얻는다.
                     if(isWin) currMonster.setExpCur(enemy);
@@ -95,7 +104,7 @@ public class FightMode
                     break;
                 //1-3. 도망간다.
                 case 3 :
-                    System.out.println(me.getTtrainerName() + "는(은) 전의를 잃고 도망쳤다.");
+                    System.out.println(me.getName() + "는(은) 전의를 잃고 도망쳤다.");
                     for(Monster myMonster : myMonsters)
                     {
                         myMonster.setBattleStatus(false);//전투불능 상태로 변경
@@ -111,10 +120,10 @@ public class FightMode
                 //0 ~ 9까지의 랜덤 함수 실행
                 //0은 도망을 선택한다(10%확률로 도망)
                 int actionInt = (int)(Math.random() * 10);
-                System.out.println("Lv." + enemy.getLevel() + " " + enemy.getMonsterName() + "의 체력 : " + enemy.getHealthPoint() +"/" + enemy.getHealthPointMax());
+                System.out.println("Lv." + enemy.getLevel() + " " + enemy.getName() + "의 체력 : " + enemy.getHealthPoint() +"/" + enemy.getHealthPointMax());
                 if(actionInt == 0)
                 {
-                    System.out.println("적의 " + enemy.getMonsterName() + "는(은) 전의를 잃고 도망쳤다.\n");
+                    System.out.println("적의 " + enemy.getName() + "는(은) 전의를 잃고 도망쳤다.\n");
                     currMonster.setExpCur(enemy);//적이 도망가도 경험치를 준다.
                     turningCoin = !turningCoin;//턴을 돌려준다.
                     enemy.setBattleStatus(false);
@@ -123,7 +132,7 @@ public class FightMode
                 {
                     System.out.print("적의 ");
                     //attack 메소드는 상태의 전투상태를 반환한다.
-                    boolean currMonStatus = enemy.attack(currMonster, enemy.getAttackPoint());
+                    boolean currMonStatus = enemy.attack(currMonster);
 
                     // 내 몬스터가 쓰러졌을때
                     if(!currMonStatus)
@@ -131,7 +140,7 @@ public class FightMode
                         //다음 주자가 있는지 확인
                         if(isFightable(me))
                         {
-                            System.out.println("돌아와!  "+ currMonster.getMonsterName() +"!");
+                            System.out.println("돌아와!  "+ currMonster.getName() +"!");
                         }
                     }
                     turningCoin = !turningCoin;//턴을 돌려준다.
@@ -140,62 +149,191 @@ public class FightMode
         }
     }
 
-    /** 
-     * 몬스터의 전투가능상태를 알아본다.
-     * false : 전투불가, true : 전투가능
-     * @param monster
-     * @return
+    /**
+     * 싸움실행 메인 트레이너 VS 트레이너
+     * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
      */
-    public static boolean isFightable(Monster monster)
+    public void startFight(MonsterTrainer me, MonsterTrainer enemy)
     {
-        return monster.isBattleStatus();
+        System.out.println("트레이너 VS 트레이너");
+        me.healthReset();// 이전 싸움에서 전투불능된 포켓몬을 다시 체력 리셋한다.
+        enemy.healthReset();// 이전 싸움에서 전투불능된 포켓몬을 다시 체력 리셋한다.
+
+        List<Monster> myMonsters    = me.getMonsterBalls();
+        List<Monster> enemyMonsters = enemy.getMonsterBalls();
+        Monster currMonster         = null; 
+        Monster currEnemyMonster    = null;
+
+        Scanner sc1 = null;
+        while(true)
+        {   
+            sc1 = new Scanner(System.in);
+            //둘중에 하나라도 전투불가 상태가 있으면 전투를 종료한다.
+            if(whoIsWinner(me, enemy) != null)
+            {
+                String winnersName = "";
+                if(whoIsWinner(me, enemy) instanceof MonsterTrainer)
+                {
+                    MonsterTrainer winner = (MonsterTrainer)whoIsWinner(me, enemy);
+                    winnersName = winner.getName();
+                    winner.setExpCur(enemy);
+                }
+                if(whoIsWinner(me, enemy) instanceof Monster)
+                {
+                    Monster winner = (Monster)whoIsWinner(me, enemy);
+                    winnersName = winner.getName();
+                }
+                
+                System.out.println("\n" + winnersName + "가 승리하였다!!");
+                System.out.println("전투를 종료합니다\n\n");
+                break;
+            }
+
+            //me 트레이너 사용가능한 포켓몬을현재 몬스터로 지정
+            for(Monster myMonster : myMonsters)
+            {
+                if(myMonster.isBattleStatus())
+                {
+                    currMonster = myMonster;
+                }
+            }
+            //enemy 트레이너 몬스터에서 사용가능한 포켓몬을현재 몬스터로 지정
+            for(Monster enemyMonster : enemyMonsters)
+            {
+                if(enemyMonster.isBattleStatus())
+                {
+                    currEnemyMonster = enemyMonster;
+                }
+            }
+            
+            System.out.println("\n*********************************************************");
+            //내차례냐 니차례냐 true : 내 차례 , false : 니 차례
+            if(turningCoin)
+            {
+                //내 차례
+                System.out.println("<나의 차례>");
+                System.out.println("Lv. " + currMonster.getLevel() + " " + currMonster.getName() + "의 체력 : " + currMonster.getHealthPoint() +"/" + currMonster.getHealthPointMax());
+                System.out.println("1. 공격");
+                System.out.println("2. 몬스터 볼을 던진다.");
+                System.out.println("3. 도망간다.");
+                
+                String nextVal = sc1.next();
+                sc1.nextLine();
+                int casePrsDecision = Integer.parseInt(String.valueOf(nextVal.charAt(0)));
+                switch(casePrsDecision)
+                {
+                //1-1. 공격
+                case 1 :
+                    System.out.println("힘내라 !!" + currMonster.getName());
+                    boolean isWin = !currMonster.attack(currEnemyMonster);
+                    
+                    //상대를 쓰러뜨렸으면 경험치를 얻는다.
+                    if(isWin)
+                    {
+                        currMonster.setExpCur(currEnemyMonster);
+
+                        //다음 주자가 있는지 확인
+                        if(isFightable(enemy))
+                        {
+                            System.out.println(currEnemyMonster.getTrainerName() + " : 돌아와!  "+ currEnemyMonster.getName() +"!");
+                        }
+                    }
+                    
+                    turningCoin = !turningCoin;//턴을 돌려준다.
+                    break;
+                //1-2. 몬스터 볼을 던진다.
+                case 2 :
+                    me.catchMonster(currEnemyMonster);//true : 잡음 , false : 못잡음
+                    turningCoin = !turningCoin;//턴을 돌려준다.
+                    break;
+                //1-3. 도망간다.
+                case 3 :
+                    System.out.println(me.getName() + "는(은) 전의를 잃고 도망쳤다.");
+                    for(Monster myMonster : myMonsters)
+                    {
+                        myMonster.setBattleStatus(false);//전투불능 상태로 변경
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                System.out.println("<상대의 차례>");
+                //니 차례
+                System.out.println("Lv." + currEnemyMonster.getLevel() + " " + currEnemyMonster.getName() + "의 체력 : " + currEnemyMonster.getHealthPoint() +"/" + currEnemyMonster.getHealthPointMax());
+                System.out.println("힘내라 !!" + currEnemyMonster.getName());
+                System.out.print(currEnemyMonster.getTrainerName() + "씨의 ");
+                //attack 메소드는 상태의 전투상태를 반환한다.
+                boolean currMonStatus = currEnemyMonster.attack(currMonster);
+                
+                // 내 몬스터가 쓰러졌을때
+                if(!currMonStatus)
+                {
+                    //다음 주자가 있는지 확인
+                    if(isFightable(me))
+                    {
+                        System.out.println(currMonster.getTrainerName() + " : 돌아와!  "+ currMonster.getName() +"!");
+                    }
+                }
+                turningCoin = !turningCoin;//턴을 돌려준다.
+            }
+        }
     }
-    /** 트레이너의 전투가능상태를 알아본다.
+    /** 전투가능상태를 알아본다.
      * false : 전투불가, true : 전투가능
-     * @param trainer
+     * @param anyone
      * @return
      */
-    public static boolean isFightable(MonsterTrainer trainer)
+    public static boolean isFightable(Object anyone)
     {
         boolean rtnBool = false;
         
-        List<Monster> monsters = trainer.getMonsterBalls();
-        
-        for (Monster monster : monsters)
+        //Monster 가 들어왔을때
+        if(anyone instanceof Monster)
         {
-            //한마리라도 전투가 가능하면 전투가능상태
-            if(monster.isBattleStatus())
-            {
-                rtnBool = true;
-            }
+            return ((Monster)anyone).isBattleStatus();
         }
-        return rtnBool;
+        //MonsterTrainer 가 들어왔을때
+        else
+        {
+            List<Monster> monsters = ((MonsterTrainer)anyone).getMonsterBalls();
+            
+            for (Monster monster : monsters)
+            {
+                //한마리라도 전투가 가능하면 전투가능상태
+                if(monster.isBattleStatus())
+                {
+                    rtnBool = true;
+                }
+            }
+            return rtnBool;
+        }
     }
     
     /**
      * 두선수의 상태를 파악해서 승자를 판단한다.
      * @param endFight
      * @param trainer
-     * @param monster
+     * @param enemy
      * @return
      */
-    public static Object whoIsWinner(MonsterTrainer trainer, Monster monster)
+    public static Object whoIsWinner(MonsterTrainer trainer, Object enemy)
     {
         Object obj = null;
         
         //둘다 전투가 가능한 상태 : 무승무 결판 안남
-        if(isFightable(trainer) && isFightable(monster))
+        if(isFightable(trainer) && isFightable(enemy))
         {
             return null;//무승부
         }
-        //트레이너가 전투불능인상태 : 몬스터 승리
-        if(!isFightable(trainer) && isFightable(monster))
+        //트레이너가 전투불능인상태 : enemy 승리
+        if(!isFightable(trainer) && isFightable(enemy))
         {
-            obj = (Object)monster;//몬스터 승리
+            obj = (Object)enemy;//enemy 승리
             return obj;
         }
-        //몬스터가 전투불능인상태 : 트레이너 승리
-        if(isFightable(trainer) && !isFightable(monster))
+        //enemy 가 전투불능인상태 : 트레이너 승리
+        if(isFightable(trainer) && !isFightable(enemy))
         {
             obj = (Object)trainer;//트레이너 승리
             return obj;
@@ -204,14 +342,6 @@ public class FightMode
         return null;
     }
     
-    /**
-     * 싸움실행 메인 트레이너 VS 트레이너
-     * "나" 는 싸움시킬 포켓몬이 한마리 이상 있다는 전제하에 startFight가 실행됨(아니면 오류)
-     */
-    public void startFight(MonsterTrainer me, MonsterTrainer enemy)
-    {
-        System.out.println("싸움실행 메인 트레이너 VS 트레이너");
-    }
     /**
      * 싸움실행 몬스터 VS 몬스터
      */
