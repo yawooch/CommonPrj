@@ -8,7 +8,15 @@ public class MonsterTrainer extends Animal implements LevelUpable
     private int monsterBallsMax        = 3;      //잡을수 있는 몬스터수
     private int level                  = 1;      //트레이너레벨
     private List<Monster> monsterBalls = null;   //잡을수 있는 몬스터수 
-    
+    private int winCount               = 0;      //승리횟수
+    private int loseCount              = 0;      //패배횟수
+    /*
+     * @param loseCount the loseCount to set
+     */
+    public void setLoseCount(int loseCount)
+    {
+        this.loseCount = loseCount;
+    }
     public MonsterTrainer()
     {
         super.name         = "지우";
@@ -45,6 +53,12 @@ public class MonsterTrainer extends Animal implements LevelUpable
             System.out.println("이미 트레이너가 있는 몬스터는 잡을수 없다!!\n"+ sparePartner.getTrainerName() + " : 뭐하는 짓이야!");
             return false;
         }
+        //트레이너 있는 몬스터를 잡을때 제외하고 HP를 10 깎는다.
+        if(sparePartner.getHealthPoint() >= 10)
+        {
+            sparePartner.setHealthPoint(sparePartner.getHealthPoint()- 10);
+        }
+        
         //체력이 20% 초과로 남았을 때는 잡을수 없다.
         if(remainHealth > 20 && monsterBalls.size() != 0)
         {
@@ -57,9 +71,10 @@ public class MonsterTrainer extends Animal implements LevelUpable
             System.out.println("몬스터볼을 최대로 보유하고 있어 잡을 수 없습니다");
             return false;
         }
-            
+        
         // TODO : 포획률 기능 추가하면...?
         System.out.println(sparePartner.getName() + "을(를) 잡았다!!");
+        sparePartner.setCaughtLevel(sparePartner.getLevel());//진화를 위한 포획시 레벨 Set
         sparePartner.setBattleStatus(false);
         addMonster(sparePartner);
         return true;
@@ -93,6 +108,7 @@ public class MonsterTrainer extends Animal implements LevelUpable
         rtnInfo += super.printInfo();
         rtnInfo += "트레이너레벨  : "  + level + "\n";
         rtnInfo += "잡은몬스터 수 : "  + monsterBalls.size()  +"/" + monsterBallsMax  + "\n";
+        rtnInfo += "전적          : "  + (winCount + loseCount)  +"전 " + winCount  +"승 " + loseCount  +"패"  + "\n";
         return rtnInfo;
     }
 
@@ -201,5 +217,29 @@ public class MonsterTrainer extends Animal implements LevelUpable
     public void setMonsterBalls(List<Monster> monsterBalls)
     {
         this.monsterBalls = monsterBalls;
+    }
+    
+    /**
+     * @return the winCount
+     */
+    public int getWinCount()
+    {
+        return winCount;
+    }
+    
+    /**
+     * @param winCount the winCount to set
+     */
+    public void setWinCount(int winCount)
+    {
+        this.winCount = winCount;
+    }
+    
+    /**
+     * @return the loseCount
+     */
+    public int getLoseCount()
+    {
+        return loseCount;
     }
 }

@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class ReadMonsterInfo
 {
+    /** "불","물","풀","전기 */
     public  static final String[] ELEMENTS = {"불","물","풀","전기"};
     private static String inputFilePathName  = "input_file/monstersInfo.txt";
     private static String outputFilePathName = "output_file/monstersInfo.txt";

@@ -7,13 +7,12 @@ import com.fakePocketmon.data.Constants;
 
 public class Monster extends Animal implements LevelUpable
 {
-    private int     healthPoint     = 0;       //생명포인트
-    private int     healthPointMax  = 100;     //생명포인트 풀피
     private int     attackPoint     = 0;       //공격력
     private String  elementAttr     = "";      //속성
     private boolean battleStatus    = true;    //전투가능상태 : true : 전투가능 , false : 전투불능
     private int     level           = 1;       //레벨
     private String  trainerName     = "";      //트레이너 이름
+    private int     caughtLevel     = 0;       //포획되었을때 레벨
 
     public Monster()
     {
@@ -56,11 +55,11 @@ public class Monster extends Animal implements LevelUpable
         String rtnInfo = "";
         
         rtnInfo += super.printInfo();
-        rtnInfo += "level        : " + level       + "\n";
-        rtnInfo += "HP           : " + healthPoint + " / " + healthPointMax + "\n";
-        rtnInfo += "공격력       : " + attackPoint + "\n";
-        rtnInfo += "속성         : " + elementAttr + "\n";
-        rtnInfo += "전투가능상태 : " + (battleStatus?"전투가능":"전투불가") + "\n";
+        rtnInfo += "level         : " + level       + "\n";
+        rtnInfo += "공격력        : " + attackPoint + "\n";
+        rtnInfo += "속성          : " + elementAttr + "\n";
+        rtnInfo += "포획시 레벨   : " + caughtLevel + "\n";
+        rtnInfo += "전투가능상태  : " + (battleStatus?"전투가능":"전투불가") + "\n";
         return rtnInfo;
     }
     
@@ -75,7 +74,7 @@ public class Monster extends Animal implements LevelUpable
         int[][] eachComfotable    = {{0,1,0,0},{-1,0,1,-1},{0,-1,0,1},{0,1,-1,0}};// 속성 상성을 표로 만들어 2차원배열을 넣었다.
         int damageGap             = 30;
         int elemntEfftPer         = 20;//%
-//        String effectString       = ""; 
+        String effectString       = ""; 
         int damage                = 0;
         
         // 일반공격 범위
@@ -92,13 +91,15 @@ public class Monster extends Animal implements LevelUpable
         String attackerEle = this.elementAttr;
         String defenserEle = defenser.getElementAttr();
 
-        System.out.println(name       + "는(은) " + defenser.getName() + "에게 " + damage + "만큼 데미지를 입혔다.");
         
         //속성공격
-        int eleEffect = eachComfotable[element.indexOf(attackerEle)][element.indexOf(defenserEle)];
-        if(eleEffect > 0) System.out.print("효과는 굉장했다\n");
-        if(eleEffect < 0) System.out.print("효과는 미미했다\n");
+        int eleEffect = eachComfotable[element.indexOf(defenserEle)][element.indexOf(attackerEle)];
+        if(eleEffect > 0) effectString = "효과는 굉장했다\n";
+        if(eleEffect < 0) effectString = "효과는 미미했다\n";
         damage = (int)(damage * (eleEffect==0?1:((double)(100+eleEffect*elemntEfftPer)/100)));//속성공격
+        
+        System.out.println(name       + "는(은) " + defenser.getName() + "에게 " + damage + "만큼 데미지를 입혔다.");
+        System.out.println(effectString);
         
         return damage;
     }
@@ -111,14 +112,13 @@ public class Monster extends Animal implements LevelUpable
         int attkGrowthRate = 20;//공격력 상승률(%)
         int hpGrowthRate   = 50;//체력   상승률(%)
         int plusMinus      = decreseLv > 0?1:(decreseLv < 0?-1:0) ;//decreseLv 의 음수양수 표시
-
-        attackPoint  = attackPoint  * (100 + plusMinus*attkGrowthRate)/100;
-        hpGrowthRate = hpGrowthRate * (100 + plusMinus*attkGrowthRate)/100;
         
+        attackPoint    = attackPoint    * (100 + plusMinus*attkGrowthRate)/100;
+        healthPointMax = healthPointMax * (100 + plusMinus*hpGrowthRate)/100;
+
         this.level = this.level + decreseLv;
     }
 
-    
     /** 상대 몬스터의 정보를 전달받아 레벨과 비교하여 경험치를 증가시킨다
      * @param expCur the expCur to set
      */
@@ -126,17 +126,18 @@ public class Monster extends Animal implements LevelUpable
     {
         int levelDiff     = enemy.getLevel() - level;
         int expGrowthRate = 20;//경험치 증가율(%) & 레벨업시, Max경험치 증가율(%)
-        System.out.println((double)((100 + expGrowthRate*levelDiff)/100));
-        int expCur = (int)((10*(levelDiff==0?1:levelDiff)) * (double)((100 + expGrowthRate*levelDiff)/100));
+        int expCur = (int)((10*(levelDiff<=0?1:levelDiff)) * ((double)(100 + expGrowthRate*levelDiff)/100.0));
+        expCur = (expCur <= 0?0: expCur);//0 이하로는 데미지가 나오지 않도록 한다
         this.expCur = this.expCur + expCur;// 현재 경험치에 획득 경험치를 더해준다.
         int overExp = this.expCur - this.expMax; 
         
         System.out.println(name       + "는(은) 경험치 " + expCur + "를 획득했다!");
+        
         //TODO : 상극 속성을 이기면 보너스...?
         //Max 경험치를 초과하면 Level Up!
         if(overExp >= 0)
         {
-            int level   = this.expMax / this.expCur; 
+            int level   = this.expCur / this.expMax; 
             this.expMax = this.expMax * (100 + expGrowthRate)/100;//expGrowthRate만큼 expMax 증가
             this.expCur = overExp;
 
@@ -146,38 +147,6 @@ public class Monster extends Animal implements LevelUpable
     }
     /*********************************** getter / setter **********************************************/
     
-    /**
-     * @return the healthPoint
-     */
-    public int getHealthPoint()
-    {
-        return healthPoint;
-    }
-
-    /**
-     * @param healthPoint the healthPoint to set
-     */
-    public void setHealthPoint(int healthPoint)
-    {
-        this.healthPoint = healthPoint;
-    }
-
-    /**
-     * @return the healthPointMax
-     */
-    public int getHealthPointMax()
-    {
-        return healthPointMax;
-    }
-
-    /**
-     * @param healthPointMax the healthPointMax to set
-     */
-    public void setHealthPointMax(int healthPointMax)
-    {
-        this.healthPointMax = healthPointMax;
-    }
-
     /**
      * @return the attackPoint
      */
@@ -201,6 +170,7 @@ public class Monster extends Animal implements LevelUpable
     {
         return elementAttr;
     }
+
 
     /**
      * @param elementAttr the elementAttr to set
@@ -234,6 +204,7 @@ public class Monster extends Animal implements LevelUpable
         return level;
     }
 
+    
     /**
      * @return the trainerName
      */
@@ -242,6 +213,7 @@ public class Monster extends Animal implements LevelUpable
         return trainerName;
     }
 
+    
     /**
      * @param trainerName the trainerName to set
      */
@@ -250,4 +222,19 @@ public class Monster extends Animal implements LevelUpable
         this.trainerName = trainerName;
     }
 
+    /**
+     * @return the caughtLevel
+     */
+    public int getCaughtLevel()
+    {
+        return caughtLevel;
+    }
+
+    /**
+     * @param caughtLevel the caughtLevel to set
+     */
+    public void setCaughtLevel(int caughtLevel)
+    {
+        this.caughtLevel = caughtLevel;
+    }
 }
